@@ -22,16 +22,21 @@
         name: zabbix-agent
         state: present
 
+    - name: Configure Zabbix agent to connect to the correct server
+      replace:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server=.*'
+        replace: 'Server=127.0.0.1,192.168.178.165'  # Replace with your Zabbix server IP
 
-    - name: Configure Zabbix agent
+    - name: Set the Hostname in the Zabbix agent configuration
       lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
-        regexp: '^Server='
-        line: 'Server=127.0.0.1,192.168.178.165'  # Replace with your Zabbix server IP
+        regexp: '^Hostname=.*'
+        line: "Hostname={{ inventory_hostname }}"
         state: present
 
-    - name: Ensure Zabbix agent is started and enabled
-      service:
+    - name: Start and enable Zabbix agent service
+      systemd:
         name: zabbix-agent
-        state: started
+        state: restarted
         enabled: yes
