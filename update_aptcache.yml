@@ -2,12 +2,12 @@
 - name: Configure APT Proxy for Debian Machines
   hosts: all
   become: yes
+  tasks:
     - name: Set APT proxy configuration
       copy:
         dest: /etc/apt/apt.conf.d/02proxy
         content: |
-          Acquire::http { Proxy "http://192.168.178.87:3142"; };
-      owner: root
+          Acquire::http { Proxy "http://192.168.178.87:3142"; };      owner: root
       group: root
       mode: '0644'
 
