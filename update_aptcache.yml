@@ -3,14 +3,25 @@
   hosts: all
   become: yes
   tasks:
+    - name: Create APT proxy configuration directory
+      file:
+        path: /etc/apt/apt.conf.d
+        state: directory
+        mode: '0755'
+
     - name: Set APT proxy configuration
       copy:
         dest: /etc/apt/apt.conf.d/02proxy
         content: |
           Acquire::http::Proxy "http://192.168.178.87:3142";
-      owner: root
-      group: root
-      mode: '0644'
+        mode: '0644'
+
+    - name: Set owner and group for the proxy configuration file
+      file:
+        path: /etc/apt/apt.conf.d/02proxy
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Update APT cache
       apt:
