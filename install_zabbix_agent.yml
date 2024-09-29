@@ -22,11 +22,17 @@
         name: zabbix-agent
         state: present
 
-    - name: Configure Zabbix agent to connect to the correct server
+    - name: Configure Zabbix agent to connect to the correct server (passive checks)
       replace:
         path: /etc/zabbix/zabbix_agentd.conf
         regexp: '^Server=.*'
-        replace: 'Server=127.0.0.1,192.168.178.165'  # Replace with your Zabbix server IP
+        replace: 'Server=192.168.178.90'  # Replace with your Zabbix server IP
+
+    - name: Configure Zabbix agent to connect to the correct server (active checks)
+      replace:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive=.*'
+        replace: 'ServerActive=192.168.178.90'  # Replace with your Zabbix server IP for active checks
 
     - name: Set the Hostname in the Zabbix agent configuration
       lineinfile:
